@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This web.xml file is not required when using Servlet 3.0 container,
+     see implementation details http://jersey.java.net/nonav/documentation/latest/jax-rs.html -->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <context-param>
+    <param-name>resteasy.scan</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  <context-param>
+    <param-name>resteasy.scan.providers</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  <context-param>
+    <param-name>resteasy.scan.resources</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  <servlet>
+    <servlet-name>Jersey Web Application</servlet-name>
+    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>jersey.config.server.provider.packages</param-name>
+      <param-value>
+      	com.conduent.ts.ops.restapi.resources,
+      	com.conduent.ts.ops.restapi.filters,
+      	com.conduent.ts.ops.restapi.exceptions
+      </param-value>
+    </init-param>
+    <init-param>
+      <param-name>jersey.config.server.provider.scanning.recursive</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>jersey.config.server.provider.classnames</param-name>
+      <param-value></param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Jersey Web Application</servlet-name>
+    <url-pattern>/api/v1/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+	<description></description>
+    <display-name>LoadCacheOnStartUp</display-name>
+    <servlet-name>LoadCacheOnStartUp</servlet-name>
+    <servlet-class>com.conduent.ts.ops.restapi.servlet.LoadCacheOnStartUp</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoadCacheOnStartUp</servlet-name>
+    <url-pattern>/load_cache</url-pattern>
+  </servlet-mapping>
+  <resource-ref>
+    <description>DB Connection</description>
+    <res-ref-name>jdbc/OpsDataSource</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+    <res-auth>Container</res-auth>
+  </resource-ref>
+</web-app>
